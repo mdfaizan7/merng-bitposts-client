@@ -3,15 +3,23 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { Grid } from "semantic-ui-react";
 import PostCard from "../components/PostCard";
-import "../App.css";
+import styled from "styled-components";
+
+const Title = styled.h1`
+  display: block;
+  text-align: center;
+  width: 100%;
+  font-size: 2rem;
+  margin-top: 10px !important;
+`;
 
 const Home = () => {
   const { loading, data } = useQuery(FETCH_POSTS_QUERY);
 
   return (
-    <Grid columns={3} divided>
-      <Grid.Row className="page-title">
-        <h1>Recent posts</h1>
+    <Grid columns={3}>
+      <Grid.Row className="page-ttle">
+        <Title>Recent Posts</Title>
       </Grid.Row>
       <Grid.Row>
         {loading ? (
