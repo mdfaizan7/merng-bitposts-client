@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/auth";
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
   const pathname = window.location.pathname;
-  console.log(pathname);
   const path =
     pathname === "/" ? "Home" : pathname === "/login" ? "Login" : "Register";
 
@@ -12,7 +13,20 @@ const Navbar = () => {
 
   const handleItemClick = (e, { name }) => setActiveItem(name);
 
-  return (
+  const navbar = user ? (
+    <Menu pointing secondary size="massive" color="teal">
+      <Menu.Item name={user.userName} active as={Link} to="/" />
+      <Menu.Menu position="right">
+        <Menu.Item
+          name="Logout"
+          onClick={() => {
+            logout();
+            setActiveItem("Home");
+          }}
+        />
+      </Menu.Menu>
+    </Menu>
+  ) : (
     <Menu pointing secondary size="massive" color="teal">
       <Menu.Item
         name="Home"
@@ -39,6 +53,8 @@ const Navbar = () => {
       </Menu.Menu>
     </Menu>
   );
+
+  return navbar;
 };
 
 export default Navbar;
