@@ -9,6 +9,7 @@ import { AuthProvider } from "./context/auth";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import SinglePost from "./pages/SinglePost";
 // components
 import Navbar from "./components/Navbar";
 // util
@@ -23,6 +24,7 @@ function App() {
           <Route exact path="/" component={Home} />
           <AuthRoute exact path="/register" component={Register} />
           <AuthRoute exact path="/login" component={Login} />
+          <Route exact path="/posts/:postId" component={SinglePost} />
         </Router>
       </Container>
     </AuthProvider>
