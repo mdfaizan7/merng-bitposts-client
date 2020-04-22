@@ -2,7 +2,7 @@ import React from "react";
 import gql from "graphql-tag";
 import { useForm } from "../util/hooks";
 import { Form, Button } from "semantic-ui-react";
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
 const CreatePost = () => {
