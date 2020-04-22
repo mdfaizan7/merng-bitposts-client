@@ -13,19 +13,18 @@ const CreatePost = () => {
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
     update(proxy, result) {
-      try {
-        const data = proxy.readQuery({
-          query: FETCH_POSTS_QUERY,
-        });
-        proxy.writeQuery({
-          query: FETCH_POSTS_QUERY,
-          variables: values,
-          data: { getPosts: [result.data.createPost, ...data.getPosts] },
-        });
-        values.body = "";
-      } catch (err) {
-        console.log(err);
-      }
+      const data = proxy.readQuery({
+        query: FETCH_POSTS_QUERY,
+      });
+      proxy.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        variables: values,
+        data: { getPosts: [result.data.createPost, ...data.getPosts] },
+      });
+      values.body = "";
+    },
+    onError(err) {
+      console.log(err);
     },
   });
 

@@ -1,0 +1,11 @@
+.page-Title {
+  display: block !important;
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 10px;
+}
+
+.ui.teal.button:active,
+.ui.teal.buttons .button:active {
+  background-color: #00b5ad;
+}
