@@ -1,35 +1,26 @@
 import React, { useContext, useState } from "react";
-import { Form, Button, Grid } from "semantic-ui-react";
-import styled from "styled-components";
-import gql from "graphql-tag";
+import { Grid, Button, Form } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
-import { useForm } from "../util/hooks";
+import gql from "graphql-tag";
+
 import { AuthContext } from "../context/auth";
+import { useForm } from "../util/hooks";
 
-const Title = styled.h1`
-  display: block;
-  text-align: center;
-  width: 100%;
-  font-size: 2rem;
-  margin-top: 10px !important;
-  margin-bottom: 50px;
-`;
-
-const Register = ({ history }) => {
+function Register(props) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
 
   const { onChange, onSubmit, values } = useForm(registerUser, {
     userName: "",
-    password: "",
     email: "",
+    password: "",
     confirmPassword: "",
   });
 
-  const [addUser, { loading }] = useMutation(REGISTER_USER_MUTATION, {
-    update(proxy, result) {
-      context.login(result.data.login);
-      history.push("/");
+  const [addUser, { loading }] = useMutation(REGISTER_USER, {
+    update(_, { data: { register: userData } }) {
+      context.login(userData);
+      props.history.push("/");
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -45,46 +36,50 @@ const Register = ({ history }) => {
     <Grid columns="equal">
       <Grid.Column />
       <Grid.Column>
-        <div>
-          <Form onSubmit={onSubmit} noValidate>
-            <Title>Register</Title>
+        <div className="form-container">
+          <Form
+            onSubmit={onSubmit}
+            noValidate
+            className={loading ? "loading" : ""}
+          >
+            <h1>Register</h1>
             <Form.Input
-              type="text"
               label="Username"
+              placeholder="Username.."
               name="userName"
+              type="text"
               value={values.userName}
-              onChange={onChange}
               error={errors.userName ? true : false}
-              placeholder="Username..."
+              onChange={onChange}
             />
             <Form.Input
-              type="email"
               label="Email"
+              placeholder="Email.."
               name="email"
+              type="email"
               value={values.email}
-              onChange={onChange}
               error={errors.email ? true : false}
-              placeholder="Email..."
+              onChange={onChange}
             />
             <Form.Input
-              type="password"
               label="Password"
+              placeholder="Password.."
               name="password"
+              type="password"
               value={values.password}
-              onChange={onChange}
               error={errors.password ? true : false}
-              placeholder="Password..."
+              onChange={onChange}
             />
             <Form.Input
-              type="password"
               label="Confirm Password"
+              placeholder="Confirm Password.."
               name="confirmPassword"
+              type="password"
               value={values.confirmPassword}
+              error={errors.confirmPassword ? true : false}
               onChange={onChange}
-              error={errors.password ? true : false}
-              placeholder="Confirm Password..."
             />
-            <Button className={loading ? "loading" : ""} type="submit" primary>
+            <Button type="submit" primary>
               Register
             </Button>
           </Form>
@@ -102,9 +97,9 @@ const Register = ({ history }) => {
       <Grid.Column />
     </Grid>
   );
-};
+}
 
-const REGISTER_USER_MUTATION = gql`
+const REGISTER_USER = gql`
   mutation register(
     $userName: String!
     $email: String!
@@ -121,8 +116,8 @@ const REGISTER_USER_MUTATION = gql`
     ) {
       id
       email
-      createdAt
       userName
+      createdAt
       token
     }
   }
